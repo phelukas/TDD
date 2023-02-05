@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
 import time
+import os
 
 MAX_WAIT = 10
 
@@ -13,6 +14,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'hhtp://' + staging_server
 
     def tearDown(self):
         self.browser.quit()
@@ -41,7 +45,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: testing')
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')                
+        inputbox = self.browser.find_element(By.ID, 'id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
