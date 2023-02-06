@@ -5,18 +5,24 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
 import time
-import os
+import sys
 
 MAX_WAIT = 10
 
 
 class NewVisitorTest(StaticLiveServerTestCase):
 
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server:
-            self.live_server_url = 'hhtp://' + staging_server
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            print("*"*50)
+            print(arg)
+            print("*"*50)
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
 
     def tearDown(self):
         self.browser.quit()
