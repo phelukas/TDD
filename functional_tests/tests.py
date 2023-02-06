@@ -24,6 +24,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
         super().setUpClass()
         cls.server_url = cls.live_server_url
 
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+
     def tearDown(self):
         self.browser.quit()
 
