@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn server for phelukas.com.br
+
+[Service]
+Restart=on-failure  
+User=ubuntu  
+WorkingDirectory=/home/ubuntu/Documents/TDD  
+EnvironmentFile=/home/ubuntu/Documents/TDD/.env  
+
+ExecStart=/home/ubuntu/Documents/TDD/venv/bin/gunicorn --bind unix:/tmp/phelukas.com.br.socket superlists.wsgi:application  
+
+[Install]
+WantedBy=multi-user.target 
