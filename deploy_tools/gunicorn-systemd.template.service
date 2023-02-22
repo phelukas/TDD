@@ -11,3 +11,32 @@ ExecStart=/home/ubuntu/Documents/TDD/venv/bin/gunicorn --bind unix:/tmp/phelukas
 
 [Install]
 WantedBy=multi-user.target 
+
+
+server {
+    listen 80;
+    server_name superlists-staging.ottg.eu;
+
+    location /static {
+        alias /home/elspeth/sites/superlists-staging.ottg.eu/static;
+    }
+
+    location / {
+        proxy_pass http://unix:/tmp/phelukas.com.br.socket;
+        proxy_set_header Host $host;
+    }
+}
+
+server {
+    listen 80;
+    server_name phelukas.com.br;
+
+    location /static {
+        alias /home/ubuntu/Documents/TDD/static;
+    }
+
+    location / {
+        proxy_pass http://unix:/tmp/phelukas.com.br.socket;
+        proxy_set_header Host $host;
+    }
+}
