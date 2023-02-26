@@ -24,6 +24,13 @@ class NewListTest(TestCase):
         new_list = List.objects.first()
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
 
+    def test_validation_errors_are_sent_back_to_home_page_template(self):
+        response = self.client.post('/lists/new', data={'item_text': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response, 'home.html')
+        expected_error = "Você não pode enviar uma lista de itens vazia"
+        self.assertContains(response, expected_error)
+
 
 class NewItemTest(TestCase):
 
@@ -80,5 +87,3 @@ class ListViewTest(TestCase):
         self.assertContains(response, 'itemey 2')
         self.assertNotContains(response, 'other list item 1')
         self.assertNotContains(response, 'other list item 2')
-
-
