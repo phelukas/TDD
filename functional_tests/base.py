@@ -40,13 +40,18 @@ class FunctionalTest(StaticLiveServerTestCase):
                     raise e
                 time.sleep(0.5)
 
-
     def wait_for(self, fn):
         start_time = time.time()                             # Marca o inicio da função
-        while True:                                          # Entra no loop 
-            try:                                             # Ele tenta executar a função caso ele 
+        while True:                                          # Entra no loop
+            try:                                             # Ele tenta executar a função caso ele
                 return fn()                                  # Consiga retorna função ele sai do loop
-            except (AssertionError, WebDriverException) as e:# Grava o erro 
-                if time.time() - start_time > MAX_WAIT:      # Veridica se o tempo que a função esta senddo executada é maior que o tempo limite de espera
-                    raise e                                  # Retona o erro da propria função casa tenha estourado o tempo limite
-                time.sleep(0.5)                              # Caso contrario ele espera mais 5 segundos
+            except (AssertionError, WebDriverException) as e:  # Grava o erro
+                # Veridica se o tempo que a função esta senddo executada é maior que o tempo limite de espera
+                if time.time() - start_time > MAX_WAIT:
+                    # Retona o erro da propria função casa tenha estourado o tempo limite
+                    raise e
+                # Caso contrario ele espera mais 5 segundos
+                time.sleep(0.5)
+
+    def get_item_input_box(self):
+        return self.browser.find_element_by_id('id_text')
